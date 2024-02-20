@@ -7,15 +7,8 @@ import (
 )
 
 func Login(c *gin.Context) {
-	s := db.AuthenticateUser(c.PostForm("username"), c.PostForm("password"))
-	c.JSON(http.StatusOK, s)
-}
+	s, token := db.AuthenticateUser(c.PostForm("username"), c.PostForm("password"))
 
-func Register(c *gin.Context) {
-	db.CreateUser(db.User{
-		Username: c.PostForm("username"),
-		Password: c.PostForm("password"),
-		RoleID:   0,
-	})
-	c.JSON(http.StatusOK, "success")
+	c.Header("Authorization", token)
+	c.JSON(http.StatusOK, Success(s))
 }

@@ -3,7 +3,20 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"github/binweee/picobin/internal/db"
+	"net/http"
 )
+
+type Result struct {
+	Code int         `json:"code"`
+	Data interface{} `json:"data,omitempty"`
+}
+
+func Success(data interface{}) Result {
+	return Result{
+		Code: http.StatusOK,
+		Data: data,
+	}
+}
 
 func Run() {
 
@@ -14,8 +27,6 @@ func Run() {
 	r := route.Group("/")
 
 	r.POST("/login", Login)
-
-	r.POST("/register", Register)
 
 	route.Run(":8080")
 }

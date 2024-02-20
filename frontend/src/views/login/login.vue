@@ -27,8 +27,18 @@
 <script setup lang="ts">
 import {User,Lock} from '@element-plus/icons-vue'
 import { reactive} from "vue";
+import axios from "axios";
 
 let loginFrom = reactive({username:'',password:''})
+
+function handleLogin(){
+  axios.post("api/login",new URLSearchParams(loginFrom)).then(response => {
+    console.log(response.data);
+  }).catch(error => {
+    console.error(error);
+  });
+
+}
 
 </script>
 
