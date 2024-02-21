@@ -15,5 +15,11 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <style scoped>
-
+.app{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+}
 </style>

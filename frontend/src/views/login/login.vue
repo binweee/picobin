@@ -14,30 +14,51 @@
           </el-form-item>
           <el-form-item/>
           <el-form-item>
-            <el-button class="login_button" type="primary" size="default" @click="handleLogin()">登陆</el-button>
+            <el-button class="login_button" type="primary"
+                       size="default" @click="handleLogin()"
+                       :loading="loading" :plain="true">登陆</el-button>
           </el-form-item>
         </el-form>
-
       </el-col>
     </el-row>
-
   </div>
+
+
 </template>
 
 <script setup lang="ts">
-import {User,Lock} from '@element-plus/icons-vue'
-import { reactive} from "vue";
+import {User,Lock} from "@element-plus/icons-vue"
+import {reactive, ref} from "vue";
 import axios from "axios";
+import TokenServer from "@/token";
+import router from "@/router";
+import {ElMessage, ElNotification} from "element-plus";
 
 let loginFrom = reactive({username:'',password:''})
+let loading =ref(false)
 
 function handleLogin(){
+  loading.value = true
   axios.post("api/login",new URLSearchParams(loginFrom)).then(response => {
-    console.log(response.data);
+    console.log(response.data.data.toString());
+    if (response.data.data === "登陆成功"){
+      const token = response.headers.authorization;
+      TokenServer.saveToken(token)
+      ElNotification({
+        title: response.data.data,
+        type: 'success',
+      })
+      router.push("layout")
+    }else{
+      ElNotification({
+        title: response.data.data,
+        type: 'error',
+      })
+    }
   }).catch(error => {
     console.error(error);
   });
-
+  loading.value = false
 }
 
 </script>
